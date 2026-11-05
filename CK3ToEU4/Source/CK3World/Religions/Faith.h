@@ -38,6 +38,7 @@ class Faith: commonItems::parser
 	long long ID = 0;
 	std::string tag;
 	std::string religionTemplate;
+	std::string faithType; // 1.20+
 	std::filesystem::path iconPath;
 	std::string customName;
 	std::string customAdjective;

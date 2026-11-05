@@ -1,4 +1,5 @@
 #include "../CK3ToEU4/Source/CK3World/Characters/Character.h"
+#include "../CK3ToEU4/Source/CK3World/Religions/Rites.h"
 #include "gtest/gtest.h"
 #include <sstream>
 
@@ -69,6 +70,35 @@ TEST(CK3World_CharacterTests, characterPrimitivesCanBeLoaded)
 	ASSERT_EQ(1, character.getTraits().count(21));
 	ASSERT_TRUE(character.isFemale());
 	ASSERT_TRUE(character.isDead());
+}
+
+TEST(CK3World_CharacterTests, ck3_120_riteResolvesIntoFaith)
+{
+	std::stringstream input;
+	input << "rite = 5\n";
+	CK3::Character character(input, 42);
+
+	std::stringstream riteInput;
+	riteInput << "database = { 5 = { rite_type = \"carolingian_christianity\" faith = 13 } }\n";
+	const CK3::Rites rites(riteInput);
+
+	ASSERT_FALSE(character.getFaith());
+	character.resolveRite(rites);
+	ASSERT_EQ(13, character.getFaith()->first);
+}
+
+TEST(CK3World_CharacterTests, ck3_120_unknownRiteLeavesFaithAlone)
+{
+	std::stringstream input;
+	input << "faith = 2 rite = 99\n";
+	CK3::Character character(input, 42);
+
+	std::stringstream riteInput;
+	riteInput << "database = { 5 = { faith = 13 } }\n";
+	const CK3::Rites rites(riteInput);
+
+	character.resolveRite(rites);
+	ASSERT_EQ(2, character.getFaith()->first);
 }
 
 TEST(CK3World_CharacterTests, characterAliveDataCanBeLoaded)

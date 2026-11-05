@@ -1,4 +1,5 @@
 #include "CountyDetail.h"
+#include "../Religions/Rites.h"
 #include "CommonRegexes.h"
 #include "Log.h"
 #include "ParserHelpers.h"
@@ -25,5 +26,19 @@ void CK3::CountyDetail::registerKeys()
 		if (faith.first == 4294967295)
 			faith.first = 0;
 	});
+	registerKeyword("rite", [this](const std::string& unused, std::istream& theStream) {
+		// CK3 1.20+ stores the county's rite instead of its faith. Resolved into a faith via resolveRite().
+		rite = commonItems::singleLlong(theStream).getLlong();
+		if (*rite == 4294967295)
+			rite.reset();
+	});
 	registerRegex(commonItems::catchallRegex, commonItems::ignoreItem);
+}
+
+void CK3::CountyDetail::resolveRite(const Rites& rites)
+{
+	if (!rite)
+		return;
+	if (const auto& faithID = rites.getFaithForRite(*rite))
+		faith = std::make_pair(*faithID, nullptr);
 }

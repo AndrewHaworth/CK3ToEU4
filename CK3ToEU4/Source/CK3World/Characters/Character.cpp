@@ -1,4 +1,5 @@
 #include "Character.h"
+#include "../Religions/Rites.h"
 #include "CommonRegexes.h"
 #include "Log.h"
 #include "ParserHelpers.h"
@@ -31,6 +32,12 @@ void CK3::Character::registerKeys()
 		faith = std::pair(commonItems::singleLlong(theStream).getLlong(), nullptr);
 		if (faith->first == 4294967295)
 			faith.reset();
+	});
+	registerKeyword("rite", [this](const std::string& unused, std::istream& theStream) {
+		// CK3 1.20+ stores the character's rite instead of their faith. Resolved into a faith via resolveRite().
+		rite = commonItems::singleLlong(theStream).getLlong();
+		if (*rite == 4294967295)
+			rite.reset();
 	});
 	registerKeyword("dynasty_house", [this](const std::string& unused, std::istream& theStream) {
 		house = std::pair(commonItems::singleLlong(theStream).getLlong(), nullptr);
@@ -147,4 +154,12 @@ bool CK3::Character::hasTrait(const std::string& wantedTrait) const
 	return std::any_of(traits.begin(), traits.end(), [wantedTrait](const std::pair<int, std::string>& trait) {
 		return trait.second == wantedTrait;
 	});
+}
+
+void CK3::Character::resolveRite(const Rites& rites)
+{
+	if (!rite)
+		return;
+	if (const auto& faithID = rites.getFaithForRite(*rite))
+		faith = std::pair(*faithID, nullptr);
 }

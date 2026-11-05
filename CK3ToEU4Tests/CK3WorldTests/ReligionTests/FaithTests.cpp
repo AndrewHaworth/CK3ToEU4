@@ -59,3 +59,54 @@ TEST(CK3World_FaithTests, faithPrimitivesCanBeLoaded)
 	ASSERT_EQ("catholic", faith.getTemplate());
 	ASSERT_FALSE(faith.getReformedFlag());
 }
+
+TEST(CK3World_FaithTests, ck3_120_tenetsLoadAsDoctrinesInOrder)
+{
+	std::stringstream input;
+	input << "tag=\"akom_pagan\"\n";
+	input << "tenets={ { tenet=\"tenet_ignored_nested\" status=core } }\n";
+	input << "tenet=\"tenet_adorcism\"\n";
+	input << "tenet=\"tenet_ancestor_worship\"\n";
+	input << "doctrine=\"doctrine_monogamy\"\n";
+
+	const CK3::Faith faith(input, 1);
+
+	ASSERT_EQ(3, faith.getDoctrines().size());
+	EXPECT_EQ("tenet_adorcism", faith.getDoctrines()[0]);
+	EXPECT_EQ("tenet_ancestor_worship", faith.getDoctrines()[1]);
+	EXPECT_EQ("doctrine_monogamy", faith.getDoctrines()[2]);
+}
+
+TEST(CK3World_FaithTests, ck3_120_faithTypeBecomesTemplateForCustomFaiths)
+{
+	std::stringstream input;
+	input << "faith_type=\"catholic\"\n";
+	input << "tag=\"dynamic_faith_108\"\n";
+
+	const CK3::Faith faith(input, 1);
+
+	EXPECT_EQ("catholic", faith.getTemplate());
+}
+
+TEST(CK3World_FaithTests, ck3_120_faithTypeMatchingOwnTagIsNotATemplate)
+{
+	std::stringstream input;
+	input << "faith_type=\"akom_pagan\"\n";
+	input << "tag=\"akom_pagan\"\n";
+
+	const CK3::Faith faith(input, 1);
+
+	EXPECT_TRUE(faith.getTemplate().empty());
+}
+
+TEST(CK3World_FaithTests, explicitTemplateWinsOverFaithType)
+{
+	std::stringstream input;
+	input << "template=\"orthodox\"\n";
+	input << "faith_type=\"catholic\"\n";
+	input << "tag=\"dynamic_faith_1\"\n";
+
+	const CK3::Faith faith(input, 1);
+
+	EXPECT_EQ("orthodox", faith.getTemplate());
+}

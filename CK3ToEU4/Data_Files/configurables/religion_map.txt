@@ -5,6 +5,28 @@
 ## religious_head: Will map to EU4 religion if it has specified religious head
 ## school: Specifies the Muslim school of law for EU4
 
+# CK3 1.20 umbrella faiths. 1.20 split faiths into rites, and most pre-1.20 faith names (theravada, ibadi, digambara, ...) live on as rite names.
+# These are the new faith-level tags; older faith names stay mapped below for pre-1.20 saves.
+link = { eu4 = catholic ck3 = christian_faith } # Chalcedonian church; head of rite is k_papal_state, main rites roman_rite/carolingian_christianity
+link = { eu4 = catholic ck3 = joachimite } # Spiritual-Franciscan heresy with no EU4 counterpart
+link = { eu4 = hussite ck3 = hussite }
+link = { eu4 = coptic ck3 = miaphysitism } # coptic_rite, antiochian_rite, ethiopian_rite
+link = { eu4 = bon ck3 = bon_faith }
+link = { eu4 = buddhism ck3 = theravada_faith ck3 = maitreya_faith }
+link = { eu4 = mahayana ck3 = mahayana_faith }
+link = { eu4 = vajrayana ck3 = vajrayana_faith }
+link = { eu4 = confucianism ck3 = confucian_faith ck3 = shangqing_faith }
+link = { eu4 = shinto ck3 = shinto_faith }
+link = { eu4 = hinduism ck3 = vaishnava_faith ck3 = shaiva_faith ck3 = shakta_faith }
+link = { eu4 = jain ck3 = jain_faith }
+link = { eu4 = jewish ck3 = rabbinic_faith }
+link = { eu4 = sunni ck3 = sadr_al_islam } # early, pre-schism Islam (main rite nabi)
+link = { eu4 = ibadi ck3 = kharijite } # main rite ibadi
+link = { eu4 = manichean ck3 = manichaean_faith }
+link = { eu4 = mandeaism ck3 = mandaean_faith }
+link = { eu4 = valentinianism ck3 = gnostic_faith } # main rite valentinianism
+link = { eu4 = yazidi ck3 = yazidi_faith }
+
 # Akom
 link = { eu4 = shamanism ck3 = akom_pagan }
 # Baltic

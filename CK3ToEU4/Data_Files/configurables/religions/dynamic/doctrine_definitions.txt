@@ -287,6 +287,15 @@ tenet_tax_nonbelievers = {
 		global_tax_modifier = 0.1
 	}
 }
+##Special doctrines (CK3 1.20+)
+special_doctrine_jizya = { # CK3: +20% domain tax from different-faith holdings. Weaker than tenet_tax_nonbelievers since it is a doctrine, not a core tenet.
+	country = {
+		global_tax_modifier = 0.1
+	}
+	country_as_secondary = {
+		global_tax_modifier = 0.05
+	}
+}
 ##Eastern
 tenet_asceticism = {
 	country = {

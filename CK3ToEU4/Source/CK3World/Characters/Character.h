@@ -9,6 +9,7 @@ namespace CK3
 class Title;
 class House;
 class Faith;
+class Rites;
 class Culture;
 typedef struct Skills
 {
@@ -55,6 +56,7 @@ class Character: commonItems::parser
 
 	void loadCulture(const std::pair<long long, std::shared_ptr<Culture>>& theCulture) { culture = theCulture; }
 	void loadFaith(const std::pair<long long, std::shared_ptr<Faith>>& theFaith) { faith = theFaith; }
+	void resolveRite(const Rites& rites);
 	void loadHouse(const std::pair<long long, std::shared_ptr<House>>& theHouse) { house = theHouse; }
 	void loadRealmCapital(const std::pair<long long, std::shared_ptr<Title>>& theRealmCapital) { characterDomain->loadRealmCapital(theRealmCapital); }
 	void loadDomain(const std::vector<std::pair<long long, std::shared_ptr<Title>>>& theDomain) { characterDomain->loadDomain(theDomain); }
@@ -93,6 +95,7 @@ class Character: commonItems::parser
 
 	std::optional<std::pair<long long, std::shared_ptr<Culture>>> culture;
 	std::optional<std::pair<long long, std::shared_ptr<Faith>>> faith;
+	std::optional<long long> rite; // CK3 1.20+
 	std::optional<std::pair<long long, std::shared_ptr<Character>>> employer;
 	std::optional<std::pair<long long, std::shared_ptr<Character>>> spouse;
 	std::optional<std::pair<long long, std::shared_ptr<Character>>> suzerain; // Tributary overlord

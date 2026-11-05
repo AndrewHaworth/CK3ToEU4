@@ -201,8 +201,22 @@ void CK3::World::registerKeys(const std::shared_ptr<Configuration>& theConfigura
 	registerKeyword("religion", [this](const std::string& unused, std::istream& theStream) {
 		Log(LogLevel::Info) << "-> Loading religions.";
 		religions = Religions(theStream);
-		faiths = religions.getFaiths(); // Do not access faiths in religions after this - there are none and will crash.
+		// Pre-1.20 saves nest faiths inside the religion block. Don't clobber a top-level faiths block (1.20+) if it was parsed first.
+		if (auto nestedFaiths = religions.getFaiths(); !nestedFaiths.getFaiths().empty()) // Do not access faiths in religions after this.
+			faiths = std::move(nestedFaiths);
 		Log(LogLevel::Info) << "<> Loaded " << religions.getReligions().size() << " religions and " << faiths.getFaiths().size() << " faiths.";
+	});
+	registerKeyword("rites", [this](const std::string& unused, std::istream& theStream) {
+		// CK3 1.20+ characters and counties reference rites, each of which belongs to a faith.
+		Log(LogLevel::Info) << "-> Loading rites.";
+		rites = Rites(theStream);
+		Log(LogLevel::Info) << "<> Loaded " << rites.getRiteFaiths().size() << " rites.";
+	});
+	registerKeyword("faiths", [this](const std::string& unused, std::istream& theStream) {
+		// CK3 1.20+ moved faiths out of the religion block into their own top-level faiths={ database={ ... } } block.
+		Log(LogLevel::Info) << "-> Loading faiths.";
+		faiths = Faiths(theStream);
+		Log(LogLevel::Info) << "<> Loaded " << faiths.getFaiths().size() << " faiths.";
 	});
 	registerKeyword("coat_of_arms", [this](const std::string& unused, std::istream& theStream) {
 		Log(LogLevel::Info) << "-> Loading garments of limbs.";
@@ -404,6 +418,14 @@ void CK3::World::crosslinkDatabases()
 	countyDetails.linkCultures(cultures);
 	Log(LogLevel::Info) << "-> Loading Cultures into Characters.";
 	characters.linkCultures(cultures);
+	if (!rites.getRiteFaiths().empty())
+	{
+		Log(LogLevel::Info) << "-> Resolving Rites into Faiths.";
+		for (const auto& countyDetail: countyDetails.getCountyDetails() | std::views::values)
+			countyDetail->resolveRite(rites);
+		for (const auto& character: characters.getCharacters() | std::views::values)
+			character->resolveRite(rites);
+	}
 	Log(LogLevel::Info) << "-> Loading Faiths into Counties.";
 	countyDetails.linkFaiths(faiths);
 	Log(LogLevel::Info) << "-> Loading Faiths into Characters.";

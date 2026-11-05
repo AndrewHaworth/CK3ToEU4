@@ -16,6 +16,7 @@ class CK3ReligionScraper: commonItems::bulkParser
 
   private:
 	void registerKeys();
+	void registerFaithTypeKeys();
 
 	std::map<std::string, std::set<std::string>> religionFaiths; // religionname, <faithnames>
 };

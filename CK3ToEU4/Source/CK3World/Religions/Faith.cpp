@@ -8,6 +8,11 @@ CK3::Faith::Faith(std::istream& theStream, long long theID): ID(theID)
 	registerKeys();
 	parseStream(theStream);
 	clearRegisteredKeywords();
+
+	// CK3 1.20+ dropped "template" in favour of "faith_type", which every faith has. For historical faiths it equals the faith's own tag,
+	// so only treat it as a template when it points elsewhere, matching what pre-1.20 saves stored in "template".
+	if (religionTemplate.empty() && !faithType.empty() && faithType != tag)
+		religionTemplate = faithType;
 }
 
 void CK3::Faith::registerKeys()
@@ -17,6 +22,13 @@ void CK3::Faith::registerKeys()
 	});
 	registerKeyword("doctrine", [this](const std::string& unused, std::istream& theStream) {
 		doctrines.emplace_back(commonItems::singleString(theStream).getString());
+	});
+	registerKeyword("tenet", [this](const std::string& unused, std::istream& theStream) {
+		// CK3 1.20+ stores tenets as tenet="..." instead of doctrine="tenet_...". Downstream treats tenets as doctrines.
+		doctrines.emplace_back(commonItems::singleString(theStream).getString());
+	});
+	registerKeyword("faith_type", [this](const std::string& unused, std::istream& theStream) {
+		faithType = commonItems::singleString(theStream).getString();
 	});
 	registerKeyword("religion", [this](const std::string& unused, std::istream& theStream) {
 		religion = std::make_pair(commonItems::singleLlong(theStream).getLlong(), nullptr);

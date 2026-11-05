@@ -31,6 +31,7 @@
     <ClCompile Include="..\CK3ToEU4\Source\CK3World\Geography\ProvinceHoldings.cpp" />
     <ClCompile Include="..\CK3ToEU4\Source\CK3World\Religions\Faith.cpp" />
     <ClCompile Include="..\CK3ToEU4\Source\CK3World\Religions\Faiths.cpp" />
+    <ClCompile Include="..\CK3ToEU4\Source\CK3World\Religions\Rites.cpp" />
     <ClCompile Include="..\CK3ToEU4\Source\CK3World\Religions\Religion.cpp" />
     <ClCompile Include="..\CK3ToEU4\Source\CK3World\Religions\Religions.cpp" />
     <ClCompile Include="..\CK3ToEU4\Source\CK3World\Titles\DynamicTemplate.cpp" />
@@ -138,6 +139,7 @@
     <ClInclude Include="..\CK3ToEU4\Source\CK3World\Geography\ProvinceHoldings.h" />
     <ClInclude Include="..\CK3ToEU4\Source\CK3World\Religions\Faith.h" />
     <ClInclude Include="..\CK3ToEU4\Source\CK3World\Religions\Faiths.h" />
+    <ClInclude Include="..\CK3ToEU4\Source\CK3World\Religions\Rites.h" />
     <ClInclude Include="..\CK3ToEU4\Source\CK3World\Religions\Religion.h" />
     <ClInclude Include="..\CK3ToEU4\Source\CK3World\Religions\Religions.h" />
     <ClInclude Include="..\CK3ToEU4\Source\CK3World\Titles\DynamicTemplate.h" />

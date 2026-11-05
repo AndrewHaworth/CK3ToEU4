@@ -23,6 +23,7 @@
 #include "Parser.h"
 #include "Religions/Faiths.h"
 #include "Religions/Religions.h"
+#include "Religions/Rites.h"
 #include "Titles/LandedTitles.h"
 #include "Titles/Titles.h"
 #include <Date.h>
@@ -101,6 +102,7 @@ class World: commonItems::parser
 	Houses houses;
 	Religions religions;
 	Faiths faiths;
+	Rites rites; // 1.20+
 	CoatsOfArms coats;
 	LandedTitles landedTitles;
 	Mods mods;
